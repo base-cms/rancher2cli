@@ -1,3 +1,4 @@
+const async = require('async');
 const r2 = require('@endeavorb2b/rancher2api');
 
 const {
@@ -35,10 +36,10 @@ const upgradeService = ({ projectId, id, deploymentConfig, containers }, image) 
 module.exports = async ({ key, value, image, namespace }) => {
   log('Retrieving workloads...');
   const namespaces = await getNamespaces(namespace);
-  const promised = await Promise.all(namespaces.map(n => getWorkloads(n, key, value)));;
-  const workloads = promised.reduce((arr, w) => arr.concat(w), []);
-
-  log(`Upgrading ${workloads.length} workloads...`);
-  await Promise.all(workloads.map(async w => await upgradeService(w, image)));
+  async.mapLimit(namespaces, 2, async function(namespace) {
+    const promised = await getWorkloads(namespace, key, value);
+    const workloads = promised.reduce((arr, w) => arr.concat(w), []);
+    await Promise.all(workloads.map(async w => await upgradeService(w, image)));
+  });
   log('Done with upgrades.');
 };
