@@ -34,13 +34,16 @@ const upgradeService = ({ projectId, id, deploymentConfig, containers }, image) 
 module.exports = async ({ key, value, image, namespace }) => {
   log('Retrieving namespaces...');
   const namespaces = await getNamespaces(namespace);
+  const namespaceIds = namespaces.map(({ id }) => id);
   const projectIds = [...new Set(namespaces.map(({ projectId }) => projectId))];
 
   const workloads = [];
   log('Retrieving workloads...');
   await eachSeries(projectIds, async (projectId) => {
     const projectWorkloads = await getWorkloads(projectId, key, value);
-    projectWorkloads.forEach(workload => workloads.push(workload));
+    projectWorkloads
+      .filter(({ namespaceId }) => namespaceIds.includes(namespaceId))
+      .forEach(workload => workloads.push(workload));
   });
 
   log(`Upgrading ${workloads.length} workloads...`);
