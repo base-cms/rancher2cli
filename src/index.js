@@ -8,6 +8,6 @@ commands(yargs);
 yargs.demandCommand().help().argv;
 
 process.on('unhandledRejection', (e) => {
-  log('> Unhandled promise rejection. Throwing error...');
+  console.log('> Unhandled promise rejection. Throwing error...');
   throw e;
 });
