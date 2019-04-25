@@ -1,5 +1,3 @@
-const bootstrap = require('./bootstrap');
-
 module.exports = (yargs) => {
-  yargs.command(['bootstrap'], 'Bootstraps environment', () => {}, bootstrap);
+  yargs.command(['bootstrap'], 'Bootstraps @endeavorb2b environment', () => {}, () => require('./bootstrap')());
 };
