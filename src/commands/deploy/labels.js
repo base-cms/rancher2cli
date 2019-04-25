@@ -1,4 +1,5 @@
 const r2 = require('@endeavorb2b/rancher2api');
+const { eachSeries } = require('@base-cms/async');
 
 const {
   RANCHER_URL: uri,
@@ -13,11 +14,9 @@ const getNamespaces = async (namespace) => {
   return namespaces.filter(n => !namespace || namespace && n.id === namespace);
 };
 
-const getWorkloads = async ({ id, projectId }, key, value) => {
+const getWorkloads = async (projectId, key, value) => {
   const workloads = await r2.workload.list({ uri, token, projectId });
-  return workloads
-    .filter(({ namespaceId }) => namespaceId === id)
-    .filter(w => w.labels[key] === value);
+  return workloads.filter(w => w.labels[key] === value);
 };
 
 const upgradeService = ({ projectId, id, deploymentConfig, containers }, image) => {
@@ -33,12 +32,21 @@ const upgradeService = ({ projectId, id, deploymentConfig, containers }, image) 
 };
 
 module.exports = async ({ key, value, image, namespace }) => {
-  log('Retrieving workloads...');
+  log('Retrieving namespaces...');
   const namespaces = await getNamespaces(namespace);
-  const promised = await Promise.all(namespaces.map(n => getWorkloads(n, key, value)));;
-  const workloads = promised.reduce((arr, w) => arr.concat(w), []);
+  const projectIds = [...new Set(namespaces.map(({ projectId }) => projectId))];
+
+  const workloads = [];
+  log('Retrieving workloads...');
+  await eachSeries(projectIds, async (projectId) => {
+    const projectWorkloads = await getWorkloads(projectId, key, value);
+    projectWorkloads.forEach(workload => workloads.push(workload));
+  });
 
   log(`Upgrading ${workloads.length} workloads...`);
-  await Promise.all(workloads.map(async w => await upgradeService(w, image)));
+  await eachSeries(workloads, async (workload) => {
+    log(`Upgrading workload in ${workload.namespaceId}`);
+    await upgradeService(workload, image)
+  });
   log('Done with upgrades.');
 };

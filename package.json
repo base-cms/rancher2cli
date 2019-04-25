@@ -6,6 +6,7 @@
   "author": "solocommand <josh@limit0.io>",
   "license": "MIT",
   "dependencies": {
+    "@base-cms/async": "^0.8.0",
     "@endeavorb2b/rancher2api": "^1.0.4",
     "aws-sdk": "^2.430.0",
     "node-fetch": "^2.3.0",
