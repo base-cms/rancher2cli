@@ -38,7 +38,7 @@ const ingressRulesFor = ({ accountKey, groupKey, domain, namespace }) => {
     },
     {
       workloadIds: [`deployment:${namespace}:website`],
-      host: `next.${domain}`,
+      host: `next2.${domain}`,
     },
     {
       workloadIds: [`deployment:${namespace}:website`],

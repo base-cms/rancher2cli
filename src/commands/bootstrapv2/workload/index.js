@@ -27,34 +27,36 @@ const upsertWorkload = ({ name, namespaceId, projectId, workloads, containers, c
   return r2.workload.create({ uri, token, projectId, namespaceId, name, containers, labels, cronJobConfig });
 };
 
-const workloadConfig = (workload, site, namespaceId, n) => {
-  const { accountKey: account, groupKey: group, replicaSet, tenantKey } = site;
+const scale = (obj, n = 1) => new Array(n).fill(obj);
+
+const workloadConfig = (workload, site, namespaceId) => {
+  const { replicaSet, key, tenantKey } = site;
+  const target = workload === 'website' ? `${workload}-${key}` : workload;
   const labels = {
-    'basecms-service': `${workload}-v1`,
-    account,
-    group,
-    'workload.user.cattle.io/workloadselector': `deployment-${namespaceId}-${workload}`,
+    'basecms-service': workload,
+    'workload.user.cattle.io/workloadselector': `deployment-${namespaceId}-${target}`,
   };
   switch (workload) {
-    case 'graphql':
+    case 'graphql-server':
       return {
-        containers: [graphql(replicaSet, tenantKey, namespaceId)],
-        labels: { ...labels, 'basecms-service': 'graphql-server-v1' },
+        containers: [graphql(replicaSet)],
+        labels,
       };
     case 'website':
-      const containers = [publishedSites.includes(namespaceId) ? website(namespaceId, WEBSITE_VERSION) : website()];
+      const image = publishedSites.includes(key) ? `endeavorb2b/website-${key}:v${WEBSITE_VERSION}` : 'endeavorb2b/website-blank:v0.0.1'
+      const containers = [publishedSites.includes(key) ? website(key, image, tenantKey) : website(key, image, tenantKey)];
       return {
         containers,
-        labels,
+        labels: { ...labels, 'basecms-website': key },
       };
     case 'sitemaps':
       return {
-        containers: [sitemaps(replicaSet, tenantKey)],
+        containers: [sitemaps(replicaSet)],
         labels,
       };
     case 'rss':
       return {
-        containers: [rss(replicaSet, tenantKey)],
+        containers: [rss(replicaSet)],
         labels,
       };
   }
