@@ -20,8 +20,8 @@ module.exports = cleanEnv(process.env, {
   RS_CAPRICA: nonemptystr({ desc: 'The MongoDB DSN for the Caprica replicaset.' }),
   RS_PICON: nonemptystr({ desc: 'The MongoDB DSN for the Picon replicaset.' }),
   RS_AERILON: nonemptystr({ desc: 'The MongoDB DSN for the Aerilon replicaset.' }),
-  WEBSITE_VERSION: nonemptystr({ desc: 'The website workload version to deploy', default: '0.7.13' }),
-  GRAPHQL_VERSION: nonemptystr({ desc: 'The graphql workload version to deploy', default: '0.9.9' }),
-  SITEMAP_VERSION: nonemptystr({ desc: 'The sitemap workload version to deploy', default: '0.9.3' }),
-  RSS_VERSION: nonemptystr({ desc: 'The rss workload version to deploy', default: '0.9.3' }),
+  WEBSITE_VERSION: nonemptystr({ desc: 'The website workload version to deploy', default: '0.9.4' }),
+  GRAPHQL_VERSION: nonemptystr({ desc: 'The graphql workload version to deploy', default: '0.9.22' }),
+  SITEMAP_VERSION: nonemptystr({ desc: 'The sitemap workload version to deploy', default: '0.9.22' }),
+  RSS_VERSION: nonemptystr({ desc: 'The rss workload version to deploy', default: '0.9.22' }),
 });
