@@ -8,7 +8,12 @@ const {
   SENDGRID_API_KEY,
 } = require('../env');
 
-const getImageDomain = domain => ['officer', 'evaluationengineering', 'plasticsmachinerymagazine'].includes(domain)
+const pendingImgix = [
+  'officer',
+  'evaluationengineering',
+  'plasticsmachinerymagazine',
+];
+const getImageDomain = domain => pendingImgix.includes(domain)
   ? 'base.imgix.net'
   : `img.${domain}.com`;
 
@@ -32,14 +37,8 @@ const securityContext = {
   readOnly: false,
   runAsNonRoot: false,
   resources: {
-    limits: {
-      cpu: '500m',
-      memory: '350Mi',
-    },
-    requests: {
-      cpu: '25m',
-      memory: '275Mi',
-    },
+    limits: { cpu: '500m', memory: '350Mi' },
+    requests: { cpu: '25m', memory: '275Mi' },
   },
   terminationMessagePath: '/dev/termination-log',
   terminationMessagePolicy: 'File',
@@ -53,9 +52,28 @@ const containerSpecs = {
   ...securityContext,
 };
 
+const resources = {
+  website: {
+    limits: { cpu: '1000m', memory: '350Mi' },
+    requests: { cpu: '150m', memory: '275Mi' },
+  },
+  graphql: {
+    limits: { cpu: '1200m', memory: '450Mi' },
+    requests: { cpu: '250m', memory: '350Mi' },
+  },
+  sitemaps: {
+    limits: { cpu: '500m', memory: '300Mi' },
+    requests: { cpu: '100m', memory: '250Mi' },
+  },
+  rss: {
+    limits: { cpu: '1000m', memory: '150Mi' },
+    requests: { cpu: '100m', memory: '100Mi' },},
+}
+
 module.exports = {
   graphql: (MONGO_DSN, version = GRAPHQL_VERSION) => ({
     ...containerSpecs,
+    resources: { ...resources.graphql },
     environment: {
       MONGO_DSN,
       ENGINE_API_KEY,
@@ -67,6 +85,7 @@ module.exports = {
   }),
   sitemaps: (MONGO_DSN, version = SITEMAP_VERSION) => ({
     ...containerSpecs,
+    resources: { ...resources.sitemaps },
     environment: {
       MONGO_DSN,
       NEW_RELIC_ENABLED,
@@ -77,6 +96,7 @@ module.exports = {
   }),
   rss: (MONGO_DSN, version = RSS_VERSION) => ({
     ...containerSpecs,
+    resources: { ...resources.rss },
     environment: {
       MONGO_DSN,
       NEW_RELIC_ENABLED,
@@ -87,6 +107,7 @@ module.exports = {
   }),
   website: (key, image, TENANT_KEY) => ({
     ...containerSpecs,
+    resources: { ...resources.website },
     environment: {
       NEW_RELIC_ENABLED,
       NEW_RELIC_LICENSE_KEY,
