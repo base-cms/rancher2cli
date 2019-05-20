@@ -1,9 +1,6 @@
 const r2 = require('@endeavorb2b/rancher2api');
-const { join } = require('path')
 const { workloadConfig, upsertWorkload } = require('./workload');
-
-const websitesPath = join(__dirname, '../../../../websites');
-const sites = require(join(websitesPath, 'sites'));
+const sites = require('./sites');
 
 const { log } = console;
 const {
@@ -42,7 +39,7 @@ const websiteIngressRulesFor = (namespace, sites = []) => {
     if (!publishedSites.includes(domain)) {
       entries.push({
         workloadIds: [`deployment:${namespace}:${target}`],
-        host: `${accountKey}-${groupKey}.next.baseplatform.io`,
+        host: `${accountKey}-${groupKey}.next.base-cms.io`,
       });
       entries.push({
         workloadIds: [`deployment:${namespace}:${target}`],

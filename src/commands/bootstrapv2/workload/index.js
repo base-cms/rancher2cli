@@ -1,18 +1,10 @@
-const { readdirSync, statSync } = require('fs')
-const { join } = require('path')
 const r2 = require('@endeavorb2b/rancher2api');
 const { graphql, sitemaps, website, rss } = require('./container-specs');
+const sites = require('../sites');
+const { RANCHER_URL: uri, RANCHER_TOKEN: token, WEBSITE_VERSION } = require('../env');
 
 const { log } = console;
-const websitesPath = join(__dirname, '../../../../../websites');
-const dirs = p => readdirSync(p).filter(f => statSync(join(p, f)).isDirectory())
-const publishedSites = dirs(join(websitesPath, 'sites'));
-
-const {
-  RANCHER_URL: uri,
-  RANCHER_TOKEN: token,
-  WEBSITE_VERSION,
-} = require('../env');
+const publishedSites = Object.keys(sites).reduce((arr, k) => ( sites[k].hasContainer ? [...arr, k] : arr ), []);
 
 const upsertWorkload = ({ name, namespaceId, projectId, workloads, containers, cronJobConfig, labels = {} }) => {
   const type = cronJobConfig ? 'cronjob' : 'deployment';
@@ -26,8 +18,6 @@ const upsertWorkload = ({ name, namespaceId, projectId, workloads, containers, c
   log(`Creating workload ${workloadId}`);
   return r2.workload.create({ uri, token, projectId, namespaceId, name, containers, labels, cronJobConfig });
 };
-
-const scale = (obj, n = 1) => new Array(n).fill(obj);
 
 const workloadConfig = (workload, site, namespaceId) => {
   const { replicaSet, key, tenantKey } = site;
