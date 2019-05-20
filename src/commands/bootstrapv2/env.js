@@ -12,7 +12,7 @@ const nonemptystr = makeValidator((v) => {
 module.exports = cleanEnv(process.env, {
   RANCHER_URL: nonemptystr({ desc: 'The Rancher2 API URL' }),
   RANCHER_TOKEN: nonemptystr({ desc: 'The Rancher2 API token' }),
-  RANCHER_CLUSTERID: nonemptystr({ desc: 'The Rancher2 API cluster identifier' }),
+  RANCHER_CLUSTERID: nonemptystr({ desc: 'The Rancher2 API cluster identifier', default: 'c-rc5kp' }),
   NEW_RELIC_LICENSE_KEY: nonemptystr({ desc: 'The NewRelic APM License Key' }),
   ENGINE_API_KEY: nonemptystr({ desc: 'The Apollo Engine API Key' }),
   RECAPTCHA_SECRET_KEY: nonemptystr({ desc: 'The reCAPTCHA secret key' }),
