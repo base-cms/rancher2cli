@@ -73,8 +73,8 @@ const resources = {
     requests: { cpu: '150m', memory: '275Mi' },
   },
   graphql: {
-    limits: { cpu: '1200m', memory: '450Mi' },
-    requests: { cpu: '250m', memory: '350Mi' },
+    limits: { cpu: '1500m', memory: '450Mi' },
+    requests: { cpu: '400m', memory: '350Mi' },
   },
   sitemaps: {
     limits: { cpu: '500m', memory: '300Mi' },
