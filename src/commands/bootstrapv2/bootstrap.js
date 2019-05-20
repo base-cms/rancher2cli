@@ -21,6 +21,13 @@ const RS = {
   aerilon: RS_AERILON,
 };
 
+const publishedSites = Object.values(sites).reduce((arr, { published, domain }) => {
+  if (published) {
+    return [...arr, domain];
+  }
+  return arr;
+}, []);
+
 const websiteIngressRulesFor = (namespace, sites = []) => {
   const set = [];
   const targetPort = 80;
@@ -29,21 +36,23 @@ const websiteIngressRulesFor = (namespace, sites = []) => {
     const entries = [
       {
         workloadIds: [`deployment:${namespace}:${target}`],
-        host: `next.${accountKey}-${groupKey}.baseplatform.io`,
-      },
-      {
-        workloadIds: [`deployment:${namespace}:${target}`],
-        host: `next.${domain}`,
-      },
-      {
-        workloadIds: [`deployment:${namespace}:${target}`],
         host: `www.${domain}`,
       },
-      // {
+    ];
+    if (!publishedSites.includes(domain)) {
+      entries.push({
+        workloadIds: [`deployment:${namespace}:${target}`],
+        host: `next.${accountKey}-${groupKey}.baseplatform.io`,
+      });
+      entries.push({
+        workloadIds: [`deployment:${namespace}:${target}`],
+        host: `next.${domain}`,
+      });
+      // entries.push({
       //   workloadIds: [`deployment:${namespace}:${target}`],
       //   host: `${target}.${namespace}.10.0.8.155.xip.io`,
-      // },
-    ];
+      // });
+    }
 
     const rules = entries.map(({ workloadIds, host }) => ({ host, paths: [{ targetPort, workloadIds }] }));
     rules.forEach(rule => set.push(rule));
