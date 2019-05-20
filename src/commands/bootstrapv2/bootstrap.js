@@ -42,7 +42,7 @@ const websiteIngressRulesFor = (namespace, sites = []) => {
     if (!publishedSites.includes(domain)) {
       entries.push({
         workloadIds: [`deployment:${namespace}:${target}`],
-        host: `next.${accountKey}-${groupKey}.baseplatform.io`,
+        host: `${accountKey}-${groupKey}.next.baseplatform.io`,
       });
       entries.push({
         workloadIds: [`deployment:${namespace}:${target}`],
