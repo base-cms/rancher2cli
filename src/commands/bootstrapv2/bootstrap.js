@@ -24,9 +24,13 @@ const RS = {
 const websiteIngressRulesFor = (namespace, sites = []) => {
   const set = [];
   const targetPort = 80;
-  sites.filter(s => s.namespace === namespace).forEach(({ domain, key }) => {
+  sites.filter(s => s.namespace === namespace).forEach(({ domain, key, accountKey, groupKey }) => {
     const target = `website-${key}`;
     const entries = [
+      {
+        workloadIds: [`deployment:${namespace}:${target}`],
+        host: `next.${accountKey}-${groupKey}.baseplatform.io`,
+      },
       {
         workloadIds: [`deployment:${namespace}:${target}`],
         host: `next.${domain}`,
