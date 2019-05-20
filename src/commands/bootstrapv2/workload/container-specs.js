@@ -12,6 +12,21 @@ const pendingImgix = [
   'officer',
   'evaluationengineering',
   'plasticsmachinerymagazine',
+  'athleticbusiness.com',
+  'aquamagazine.com',
+  'woodfloorbusiness.com',
+  'clevescene.com',
+  'metrotimes.com',
+  'orlandoweekly.com',
+  'sacurrent.com',
+  'riverfronttimes.com',
+  'outinsa.com',
+  'outinstl.com',
+  'packworld.com',
+  'automationworld.com',
+  'healthcarepackaging.com',
+  'profoodworld.com',
+  'oemmagazine.org',
 ];
 const getImageDomain = domain => pendingImgix.includes(domain)
   ? 'base.imgix.net'
