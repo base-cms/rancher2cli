@@ -9,6 +9,7 @@
     "@base-cms/async": "^0.8.0",
     "@endeavorb2b/rancher2api": "^1.0.4",
     "aws-sdk": "^2.430.0",
+    "dotenv": "^8.0.0",
     "envalid": "^5.0.0",
     "node-fetch": "^2.3.0",
     "uuid": "^3.3.2",

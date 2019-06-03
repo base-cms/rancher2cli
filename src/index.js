@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
+require('dotenv').config();
 const yargs = require('yargs');
-
 const commands = require('./commands');
 
 commands(yargs);
