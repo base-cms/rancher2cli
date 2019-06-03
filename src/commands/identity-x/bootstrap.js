@@ -17,6 +17,11 @@ const serviceIngressRules = (namespace) => {
       path: '/graphql',
     },
     {
+      workloadIds: [`deployment:${namespace}:graphql`],
+      host: 'identity-x.base-cms.io',
+      path: '/_health',
+    },
+    {
       workloadIds: [`deployment:${namespace}:manage`],
       host: 'identity-x.base-cms.io',
     },
