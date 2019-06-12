@@ -61,12 +61,6 @@ const environment = {
   MONGO_DSN,
   NEW_RELIC_ENABLED: true,
   NEW_RELIC_LICENSE_KEY,
-  APPLICATION_SERVICE_URL: 'http://application',
-  MAILER_SERVICE_URL: 'http://mailer',
-  MEMBERSHIP_SERVICE_URL: 'http://membership',
-  ORGANIZATION_SERVICE_URL: 'http://organization',
-  TOKEN_SERVICE_URL: 'http://token',
-  USER_SERVICE_URL: 'http://user',
 };
 
 const containersFor = (name) => {
