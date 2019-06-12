@@ -61,6 +61,7 @@ const environment = {
   MONGO_DSN,
   NEW_RELIC_ENABLED: true,
   NEW_RELIC_LICENSE_KEY,
+  APPLICATION_URL: 'https://identity-x.base-cms.io'
 };
 
 const containersFor = (name) => {
