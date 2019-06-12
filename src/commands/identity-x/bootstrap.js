@@ -76,6 +76,7 @@ const createServices = async () => {
   const services = [
     'application',
     'graphql',
+    'locale',
     'mailer',
     'manage',
     'membership',
