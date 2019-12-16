@@ -1,6 +1,6 @@
 {
   "name": "@endeavorb2b/rancher2cli",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Infrastructure builder using Rancher2 API",
   "main": "src/index.js",
   "author": "solocommand <josh@limit0.io>",
