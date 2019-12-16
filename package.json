@@ -17,5 +17,8 @@
   },
   "bin": {
     "r2": "./src/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
